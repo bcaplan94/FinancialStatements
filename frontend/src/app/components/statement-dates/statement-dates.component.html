@@ -1,0 +1,4 @@
+<select #dates (change)="dateChange($event)">
+    <option *ngFor="let date of dateList" [selected]='initialSelection == dateList.indexOf(date)' >{{date.toISOString().slice(0, 7)}}</option>
+</select>
+

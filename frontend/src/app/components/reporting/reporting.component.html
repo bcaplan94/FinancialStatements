@@ -1,0 +1,26 @@
+<app-statement-dates (dateChangeEvent)="getItems($event)"></app-statement-dates>
+<button (click)="deleteStatement()">Delete Statement</button>
+<button (click)="createNewStatement()">Create Statement Off Latest</button>
+
+<table class="FinancialItems" style="list-style: none;">
+    <tr *ngFor="let item of financialItems">
+       <!--
+       <span"><span *ngFor="let _ of [].constructor(item.treeHeight)"> </span>{{item.item}}</span> <span">{{item.amount}}</span>
+        -->
+        
+        <td>
+            <span *ngFor="let _ of [].constructor(item.treeHeight)"> &nbsp;&emsp;</span>
+            <input type="text" value="{{item.item}}" (focusout)="updateName(item,$event)" [disabled]="item.treeHeight === 0">
+            <button (click)="addItem(item)">+</button>
+            <button (click)="removeItem(item)" [disabled]="item.treeHeight === 0 ||item.treeHeight < financialItems[item.itemOrder+1].treeHeight" >-</button>
+        </td>
+        <td>$
+            <input  type="text" 
+                    [disabled]="item.treeHeight === 0 ||item.treeHeight < financialItems[item.itemOrder+1].treeHeight " 
+                    value="{{item.amount | number}}" 
+                    (focusout)="updateAmount(item,$event)">
+        </td>
+       <!-- <button (click)="printItems()">+</button>-->
+    </tr>
+</table>
+<Button (click)="saveChanges()">Save Statement</Button>
