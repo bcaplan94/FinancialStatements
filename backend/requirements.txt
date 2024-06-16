@@ -1,0 +1,9 @@
+Flask==3.0.3
+Flask_Cors==4.0.0
+Flask_MySQLdb==2.0.0
+marshmallow==3.21.3
+python_dateutil==2.9.0.post0
+setuptools==53.0.0
+SQLAlchemy==2.0.29
+typing_extensions==4.12.2
+python-dotenv==1.0.1

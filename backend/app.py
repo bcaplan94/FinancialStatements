@@ -22,6 +22,11 @@ app.config['MYSQL_PASSWORD'] =os.getenv("MYSQL_PASSWORD")
 app.config['MYSQL_DB'] = os.getenv("MYSQL_DATABASE") 
 
 
+@app.route('/api/hello')
+def hello():
+    items = ['HELLO WORLD2']
+    return jsonify(items)
+
 @app.route('/api/items/get_items')
 def get_items():
     session = Session()
@@ -172,4 +177,4 @@ def compare():
     return jsonify(itemList)
 
 if __name__ == '__main__':  
-   app.run(debug=True)
+    app.run(debug=True, host='0.0.0.0')

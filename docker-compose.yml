@@ -1,0 +1,43 @@
+#version: '3.2'
+
+services:
+    flask:
+        build: backend
+        restart: always
+        ports:
+            - '5000:5000'
+        volumes:
+            - ./backend:/app
+        networks:
+            - backend
+
+    mysql:
+        container_name: mysql-db
+        image: mysql:8.0.36
+        restart: always
+        environment:
+            MYSQL_ALLOW_EMPTY_PASSWORD: true
+            MYSQL_DATABASE: financial_statements
+        ports:
+            - '3308:3306'
+        volumes:
+            - ./backend/init.sql:/docker-entrypoint-initdb.d/init.sql
+        networks:
+            - backend
+    
+    angular:
+       build: frontend
+       restart: always
+       ports:
+           - '4200:4200'
+       volumes:
+           - ./frontend:/app
+       networks:
+           - backend
+
+networks:
+    backend:
+
+volumes:
+    app:
+

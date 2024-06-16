@@ -6,7 +6,7 @@ import os
 from marshmallow import Schema, fields
 
 dotenv.load_dotenv()
-db_url = 'localhost:3306'
+db_url = '172.17.0.1:3308'
 db_name = os.getenv("MYSQL_DATABASE") 
 db_user = os.getenv("MYSQL_USER")
 db_password = os.getenv("MYSQL_PASSWORD")
