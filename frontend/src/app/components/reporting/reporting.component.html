@@ -1,26 +1,35 @@
-<app-statement-dates (dateChangeEvent)="getItems($event)"></app-statement-dates>
-<button (click)="deleteStatement()">Delete Statement</button>
-<button (click)="createNewStatement()">Create Statement Off Latest</button>
+<mat-sidenav-container  hasBackdrop="false">
+    <mat-sidenav [opened]="toggle" position="end" mode="over" autoFocus="false">
+        <h1>Notes</h1>
+        <textarea matInput placeholder="Notes" *ngIf="focusItem" [(ngModel)]="focusItem.notes"></textarea>
+    </mat-sidenav>
 
-<table class="FinancialItems" style="list-style: none;">
-    <tr *ngFor="let item of financialItems">
-       <!--
-       <span"><span *ngFor="let _ of [].constructor(item.treeHeight)"> </span>{{item.item}}</span> <span">{{item.amount}}</span>
-        -->
-        
-        <td>
-            <span *ngFor="let _ of [].constructor(item.treeHeight)"> &nbsp;&emsp;</span>
-            <input type="text" value="{{item.item}}" (focusout)="updateName(item,$event)" [disabled]="item.treeHeight === 0">
-            <button (click)="addItem(item)">+</button>
-            <button (click)="removeItem(item)" [disabled]="item.treeHeight === 0 ||item.treeHeight < financialItems[item.itemOrder+1].treeHeight" >-</button>
-        </td>
-        <td>$
-            <input  type="text" 
-                    [disabled]="item.treeHeight === 0 ||item.treeHeight < financialItems[item.itemOrder+1].treeHeight " 
-                    value="{{item.amount | number}}" 
-                    (focusout)="updateAmount(item,$event)">
-        </td>
-       <!-- <button (click)="printItems()">+</button>-->
-    </tr>
-</table>
-<Button (click)="saveChanges()">Save Statement</Button>
+
+    <mat-sidenav-content (click)="colapseNotes()">
+        <app-statement-dates (dateChangeEvent)="getItems($event)"></app-statement-dates>
+        <button (click)="deleteStatement()">Delete Statement</button>
+        <button (click)="createNewStatement()">Create Statement Off Latest</button>
+
+        <table class="FinancialItems" style="list-style: none;">
+            <tr *ngFor="let item of financialItems">
+            <!--
+            <span"><span *ngFor="let _ of [].constructor(item.treeHeight)"> </span>{{item.item}}</span> <span">{{item.amount}}</span>
+                -->
+                
+                <td>
+                    <span *ngFor="let _ of [].constructor(item.treeHeight)"> &nbsp;&emsp;</span>
+                    <input (click)="$event.stopPropagation()" type="text" value="{{item.item}}" (focusout)="updateName(item,$event)" [disabled]="item.treeHeight === 0" (focusin)="bringInNotes(item,$event)">
+                    <button (click)="addItem(item)">+</button>
+                    <button (click)="removeItem(item)" [disabled]="item.treeHeight === 0 ||item.treeHeight < financialItems[item.itemOrder+1].treeHeight" >-</button>
+                </td>
+                <td>$
+                    <input  type="text" 
+                            [disabled]="item.treeHeight === 0 ||item.treeHeight < financialItems[item.itemOrder+1].treeHeight " 
+                            value="{{item.amount | number}}" 
+                            (focusout)="updateAmount(item,$event)" (focusin)="bringInNotes(item,$event)" (click)="$event.stopPropagation()">
+                </td>
+            </tr>
+        </table>
+        <Button (click)="saveChanges()">Save Statement</Button>
+    </mat-sidenav-content>
+</mat-sidenav-container> 

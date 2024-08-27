@@ -1,17 +1,23 @@
 import { Component, OnInit,Input,ViewChild } from '@angular/core';
 import { financialItem } from '../../financialItem';
 
-import { NgFor,DecimalPipe } from '@angular/common';
+import { NgFor,DecimalPipe, NgIf } from '@angular/common';
 import { UUID } from "crypto";
 import { ReportingService } from '../../reporting.service';
 
 import { StatementDatesComponent } from "../statement-dates/statement-dates.component";
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 
+/*Testing Material*/
+import {MatSidenavModule} from '@angular/material/sidenav';
+import {MatFormFieldModule} from '@angular/material/form-field'; 
+
+import { MatInputModule } from '@angular/material/input';
 
 @Component({
   selector: 'app-reporting',
   standalone: true,
-  imports: [NgFor,StatementDatesComponent,DecimalPipe],
+  imports: [NgFor,NgIf,StatementDatesComponent,DecimalPipe,MatSidenavModule,MatFormFieldModule,MatInputModule,FormsModule],
   templateUrl: './reporting.component.html',
   styleUrl: './reporting.component.css'
 })
@@ -25,8 +31,21 @@ export class ReportingComponent implements OnInit  {
   financialItems: financialItem[] =[];
   deletedItems: any[] = [];
   createdItems: Set<UUID> = new Set();
-  
+  toggle = false; 
+  focusItem?: financialItem;
+
   constructor(private reportingService: ReportingService) {}
+
+  bringInNotes(currentItem:financialItem,event: FocusEvent ): void
+  {
+    this.toggle = true;
+    this.focusItem =currentItem;
+  }
+  colapseNotes(): void
+  {
+    this.toggle = false;
+    this.focusItem = undefined;
+  }
 
   createNewStatement(): void
   {
@@ -80,11 +99,11 @@ export class ReportingComponent implements OnInit  {
   }
   
   updateAmount(updateItem:financialItem,event: FocusEvent ) {
-    if( Number( (<HTMLInputElement>event.target).value) || (<HTMLInputElement>event.target).value == "0")
+    if( Number( (<HTMLInputElement>event.target).value.replace(/,/g, '')) || (<HTMLInputElement>event.target).value == "0")
     {
-      if (updateItem.amount !== Number( (<HTMLInputElement>event.target).value) ) 
+      if (updateItem.amount !== Number( (<HTMLInputElement>event.target).value.replace(/,/g, '')) ) 
       {
-        let newAmount = Number( (<HTMLInputElement>event.target).value)
+        let newAmount = Number( (<HTMLInputElement>event.target).value.replace(/,/g, ''))
         let oldAmount = updateItem.amount
         updateItem.amount =newAmount 
         this.propagateAmounts(updateItem,newAmount-oldAmount)
