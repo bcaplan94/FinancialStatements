@@ -5,11 +5,13 @@ import { ReportingService } from '../../reporting.service';
 import { financialItemCompare } from '../../financialItem';
 import { StatementDatesComponent } from "../statement-dates/statement-dates.component";
 
+import {MatSidenavModule} from '@angular/material/sidenav';
+import { FormsModule } from '@angular/forms'; 
 
 @Component({
   selector: 'app-item-compare',
   standalone: true,
-  imports: [NgFor,StatementDatesComponent,DecimalPipe],
+  imports: [NgFor,StatementDatesComponent,DecimalPipe,MatSidenavModule,FormsModule],
   templateUrl: './item-compare.component.html',
   styleUrl: './item-compare.component.css'
 })
@@ -19,9 +21,23 @@ export class ItemCompareComponent implements OnInit  {
   
   dateList: Date[] =[];
   itemList: financialItemCompare[] = [];
+  toggle = false; 
+  focusItem?: string;
 
   constructor(private reportingService: ReportingService) {}
 
+  bringInNotes(currentItem:string,event: FocusEvent ): void
+  {
+    this.focusItem =currentItem;
+    this.toggle = true;
+
+  }
+  colapseNotes(): void
+  {
+    this.toggle = false;
+    this.focusItem = undefined;
+  }
+  
   dateChange(dateString:string): void {
     this.getComparison(this.viewChildren.first.currentDate,this.viewChildren.last.currentDate)
   }
